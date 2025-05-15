@@ -1,0 +1,54 @@
+:root {
+  --bg-color: #f5f5f5;
+  --calculator-bg: #ffffff;
+  --display-bg: #f0f0f0;
+  --button-bg: #ffffff;
+  --button-hover: #e0e0e0;
+  --button-active: #d0d0d0;
+  --operator-bg: #f0f0f0;
+  --equals-bg: #4a8fe7;
+  --equals-hover: #3a7fd7;
+  --text-color: #333333;
+  --display-text: #222222;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --toggle-bg: #4a8fe7;
+  --toggle-text: #ffffff;
+}
+
+.dark-theme {
+  --bg-color: #121212;
+  --calculator-bg: #1e1e1e;
+  --display-bg: #2d2d2d;
+  --button-bg: #2d2d2d;
+  --button-hover: #3d3d3d;
+  --button-active: #4d4d4d;
+  --operator-bg: #333333;
+  --equals-bg: #4a8fe7;
+  --equals-hover: #3a7fd7;
+  --text-color: #e0e0e0;
+  --display-text: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --toggle-bg: #333333;
+  --toggle-text: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Arial", sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  transition: background-color 0.3s;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
