@@ -4,6 +4,7 @@ import { useState } from "react"
 import Display from "./Display"
 import ThemeToggle from "./ThemeToggle"
 import "../styles/Calculator.css"
+import "../styles/Button.css"
 
 function Calculator({ theme, toggleTheme }) {
   const [expression, setExpression] = useState("")
@@ -12,6 +13,7 @@ function Calculator({ theme, toggleTheme }) {
   const handleButtonClick = (value) => {
     if (value === "=") {
       try {
+        // Substituir 'x' por '*' para avaliação
         const evalExpression = expression.replace(/x/g, "*")
         const calculatedResult = eval(evalExpression)
         setResult(calculatedResult.toString())
@@ -28,18 +30,22 @@ function Calculator({ theme, toggleTheme }) {
       }
     } else {
       setExpression(expression + value)
+      // Atualizar o resultado em tempo real para operações simples
       try {
+        // Substituir 'x' por '*' para avaliação
         const currentExpression = expression + value
         if (currentExpression.match(/[\d]+[+\-*/x][\d]+/)) {
           const evalExpression = currentExpression.replace(/x/g, "*")
           const calculatedResult = eval(evalExpression)
           setResult(calculatedResult.toString())
         } else {
+          // Se for apenas um número, mostrar esse número
           if (currentExpression.match(/^[\d.]+$/)) {
             setResult(currentExpression)
           }
         }
       } catch (error) {
+        // Ignorar erros durante a avaliação em tempo real
       }
     }
   }

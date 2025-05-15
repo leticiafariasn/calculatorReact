@@ -5,6 +5,7 @@ import "../styles/ThemeToggle.css"
 function ThemeToggle({ toggleTheme, theme }) {
   return (
     <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+      {/* Ícone do Sol - Visível no tema escuro */}
       <svg
         className="sun-icon"
         xmlns="http://www.w3.org/2000/svg"
@@ -26,6 +27,7 @@ function ThemeToggle({ toggleTheme, theme }) {
         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
       </svg>
 
+      {/* Ícone da Lua - Visível no tema claro */}
       <svg
         className="moon-icon"
         xmlns="http://www.w3.org/2000/svg"
