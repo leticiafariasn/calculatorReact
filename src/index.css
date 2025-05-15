@@ -9,4 +9,23 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Arial", sans-serif;
+  background-color: #1e1e2e;
+  transition: background-color 0.3s ease;
+}
+
+body.light-theme {
+  background-color: #f0f0f0;
+}
+
+:root {
+  --bg-dark: #1a1f2b;
+  --bg-light: #ffffff;
+  --text-dark: #ffffff;
+  --text-light: #333333;
+  --button-dark: #2d3748;
+  --button-light: #e2e8f0;
+  --operator-dark: #0066ff;
+  --operator-light: #3b82f6;
+  --hover-dark: #3a4a5e;
+  --hover-light: #cbd5e1;
 }

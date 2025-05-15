@@ -1,6 +1,6 @@
 .display {
   background-color: transparent;
-  color: #ffffff;
+  color: var(--text-dark);
   text-align: right;
   padding: 20px 10px;
   font-size: 24px;
@@ -10,6 +10,11 @@
   justify-content: flex-end;
   word-break: break-all;
   border: none;
+  transition: color 0.3s ease;
+}
+
+.light-theme .display {
+  color: var(--text-light);
 }
 
 .expression {
@@ -17,6 +22,11 @@
   color: #aaaaaa;
   margin-bottom: 5px;
   min-height: 24px;
+  transition: color 0.3s ease;
+}
+
+.light-theme .expression {
+  color: #666666;
 }
 
 .result {

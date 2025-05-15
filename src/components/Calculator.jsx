@@ -1,229 +1,95 @@
 "use client"
 
-import { useEffect } from "react"
-
 import { useState } from "react"
 import Display from "./Display"
-import Button from "./Button"
+import ThemeToggle from "./ThemeToggle"
 import "../styles/Calculator.css"
 
-const Calculator = () => {
-  const [currentOperand, setCurrentOperand] = useState("0")
-  const [previousOperand, setPreviousOperand] = useState("")
-  const [operation, setOperation] = useState(undefined)
-  const [shouldResetScreen, setShouldResetScreen] = useState(false)
+function Calculator({ theme, toggleTheme }) {
+  const [expression, setExpression] = useState("")
+  const [result, setResult] = useState("0")
 
-  const clear = () => {
-    setCurrentOperand("0")
-    setPreviousOperand("")
-    setOperation(undefined)
-  }
-
-  const deleteNumber = () => {
-    if (currentOperand === "0") return
-    if (currentOperand.length === 1 || (currentOperand.length === 2 && currentOperand.startsWith("-"))) {
-      setCurrentOperand("0")
+  const handleButtonClick = (value) => {
+    if (value === "=") {
+      try {
+        const evalExpression = expression.replace(/x/g, "*")
+        const calculatedResult = eval(evalExpression)
+        setResult(calculatedResult.toString())
+        setExpression(expression + "=" + calculatedResult)
+      } catch (error) {
+        setResult("Error")
+      }
+    } else if (value === "AC") {
+      setExpression("")
+      setResult("0")
+    } else if (value === "DEL") {
+      if (expression.length > 0) {
+        setExpression(expression.slice(0, -1))
+      }
     } else {
-      setCurrentOperand(currentOperand.slice(0, -1))
-    }
-  }
-
-  const appendNumber = (number) => {
-    if (shouldResetScreen) {
-      setCurrentOperand("")
-      setShouldResetScreen(false)
-    }
-
-    if (number === "." && currentOperand.includes(".")) return
-
-    if (currentOperand === "0" && number !== ".") {
-      setCurrentOperand(number)
-    } else {
-      setCurrentOperand(currentOperand + number)
-    }
-  }
-
-  const chooseOperation = (op) => {
-    if (currentOperand === "0" && op === "-") {
-      setCurrentOperand("-")
-      return
-    }
-
-    if (currentOperand === "") return
-
-    if (previousOperand !== "") {
-      compute()
-    }
-
-    setOperation(op)
-    setPreviousOperand(currentOperand)
-    setShouldResetScreen(true)
-  }
-
-  const compute = () => {
-    let computation
-    const prev = Number.parseFloat(previousOperand)
-    const current = Number.parseFloat(currentOperand)
-
-    if (isNaN(prev) || isNaN(current)) return
-
-    switch (operation) {
-      case "+":
-        computation = prev + current
-        break
-      case "-":
-        computation = prev - current
-        break
-      case "×":
-        computation = prev * current
-        break
-      case "/":
-        if (current === 0) {
-          alert("Erro: Divisão por zero!")
-          clear()
-          return
+      setExpression(expression + value)
+      try {
+        const currentExpression = expression + value
+        if (currentExpression.match(/[\d]+[+\-*/x][\d]+/)) {
+          const evalExpression = currentExpression.replace(/x/g, "*")
+          const calculatedResult = eval(evalExpression)
+          setResult(calculatedResult.toString())
+        } else {
+          if (currentExpression.match(/^[\d.]+$/)) {
+            setResult(currentExpression)
+          }
         }
-        computation = prev / current
-        break
-      case "%":
-        computation = (prev * current) / 100
-        break
-      default:
-        return
-    }
-
-    setCurrentOperand(computation.toString())
-    setOperation(undefined)
-    setPreviousOperand("")
-    setShouldResetScreen(true)
-  }
-
-  const getDisplayNumber = (number) => {
-    if (number === "Erro") return "Erro"
-
-    const stringNumber = number.toString()
-    const integerDigits = Number.parseFloat(stringNumber.split(".")[0])
-    const decimalDigits = stringNumber.split(".")[1]
-
-    let integerDisplay
-
-    if (isNaN(integerDigits)) {
-      integerDisplay = ""
-    } else {
-      integerDisplay = integerDigits.toLocaleString("pt-BR", {
-        maximumFractionDigits: 0,
-      })
-    }
-
-    if (decimalDigits != null) {
-      return `${integerDisplay},${decimalDigits}`
-    } else {
-      return integerDisplay
-    }
-  }
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (/[0-9]/.test(event.key)) {
-        appendNumber(event.key)
-      } else if (event.key === ".") {
-        appendNumber(".")
-      } else if (event.key === "+") {
-        chooseOperation("+")
-      } else if (event.key === "-") {
-        chooseOperation("-")
-      } else if (event.key === "*") {
-        chooseOperation("×")
-      } else if (event.key === "/") {
-        event.preventDefault() // Previne o quick find no Firefox
-        chooseOperation("/")
-      } else if (event.key === "%") {
-        chooseOperation("%")
-      } else if (event.key === "Enter" || event.key === "=") {
-        event.preventDefault()
-        compute()
-      } else if (event.key === "Backspace") {
-        deleteNumber()
-      } else if (event.key === "Escape") {
-        clear()
+      } catch (error) {
       }
     }
-
-    document.addEventListener("keydown", handleKeyDown)
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [currentOperand, previousOperand, operation])
+  }
 
   return (
-    <div className="calculator">
-      <Display
-        previousOperand={getDisplayNumber(previousOperand)}
-        currentOperand={getDisplayNumber(currentOperand)}
-        operation={operation}
-      />
+    <div className={`calculator ${theme}`}>
+      <ThemeToggle toggleTheme={toggleTheme} theme={theme} />
+      <Display expression={expression} result={result} theme={theme} />
       <div className="buttons">
-        <Button onClick={clear} className="operator" id="clear">
+        <button className="clear" onClick={() => handleButtonClick("AC")}>
           AC
-        </Button>
-        <Button onClick={deleteNumber} className="operator" id="delete">
+        </button>
+        <button className="delete" onClick={() => handleButtonClick("DEL")}>
           DEL
-        </Button>
-        <Button onClick={() => chooseOperation("%")} className="operator" id="percentage">
+        </button>
+        <button className="function" onClick={() => handleButtonClick("%")}>
           %
-        </Button>
-        <Button onClick={() => chooseOperation("/")} className="operator" id="divide">
+        </button>
+        <button className="operator" onClick={() => handleButtonClick("/")}>
           /
-        </Button>
+        </button>
 
-        <Button onClick={() => appendNumber("7")} className="number">
-          7
-        </Button>
-        <Button onClick={() => appendNumber("8")} className="number">
-          8
-        </Button>
-        <Button onClick={() => appendNumber("9")} className="number">
-          9
-        </Button>
-        <Button onClick={() => chooseOperation("×")} className="operator" id="multiply">
-          ×
-        </Button>
+        <button onClick={() => handleButtonClick("7")}>7</button>
+        <button onClick={() => handleButtonClick("8")}>8</button>
+        <button onClick={() => handleButtonClick("9")}>9</button>
+        <button className="operator" onClick={() => handleButtonClick("x")}>
+          x
+        </button>
 
-        <Button onClick={() => appendNumber("4")} className="number">
-          4
-        </Button>
-        <Button onClick={() => appendNumber("5")} className="number">
-          5
-        </Button>
-        <Button onClick={() => appendNumber("6")} className="number">
-          6
-        </Button>
-        <Button onClick={() => chooseOperation("-")} className="operator" id="subtract">
+        <button onClick={() => handleButtonClick("4")}>4</button>
+        <button onClick={() => handleButtonClick("5")}>5</button>
+        <button onClick={() => handleButtonClick("6")}>6</button>
+        <button className="operator" onClick={() => handleButtonClick("-")}>
           -
-        </Button>
+        </button>
 
-        <Button onClick={() => appendNumber("1")} className="number">
-          1
-        </Button>
-        <Button onClick={() => appendNumber("2")} className="number">
-          2
-        </Button>
-        <Button onClick={() => appendNumber("3")} className="number">
-          3
-        </Button>
-        <Button onClick={() => chooseOperation("+")} className="operator" id="add">
+        <button onClick={() => handleButtonClick("1")}>1</button>
+        <button onClick={() => handleButtonClick("2")}>2</button>
+        <button onClick={() => handleButtonClick("3")}>3</button>
+        <button className="operator" onClick={() => handleButtonClick("+")}>
           +
-        </Button>
+        </button>
 
-        <Button onClick={() => appendNumber("0")} className="number">
+        <button className="zero" onClick={() => handleButtonClick("0")}>
           0
-        </Button>
-        <Button onClick={() => appendNumber(".")} className="number" id="decimal">
-          .
-        </Button>
-        <Button onClick={compute} className="equals" id="equals">
+        </button>
+        <button onClick={() => handleButtonClick(".")}>.</button>
+        <button className="equals" onClick={() => handleButtonClick("=")}>
           =
-        </Button>
+        </button>
       </div>
     </div>
   )

@@ -4,13 +4,22 @@ button {
   font-size: 18px;
   border-radius: 12px;
   cursor: pointer;
-  background-color: #2d3748;
-  color: #ffffff;
+  background-color: var(--button-dark);
+  color: var(--text-dark);
   transition: all 0.2s ease;
 }
 
+.light-theme button {
+  background-color: var(--button-light);
+  color: var(--text-light);
+}
+
 button:hover {
-  background-color: #3a4a5e;
+  background-color: var(--hover-dark);
+}
+
+.light-theme button:hover {
+  background-color: var(--hover-light);
 }
 
 button:active {
@@ -18,21 +27,37 @@ button:active {
 }
 
 .operator {
-  background-color: #0066ff;
+  background-color: var(--operator-dark);
   color: white;
+}
+
+.light-theme .operator {
+  background-color: var(--operator-light);
 }
 
 .operator:hover {
   background-color: #0052cc;
 }
 
+.light-theme .operator:hover {
+  background-color: #2563eb;
+}
+
 .equals {
-  background-color: #0066ff;
+  background-color: var(--operator-dark);
   color: white;
+}
+
+.light-theme .equals {
+  background-color: var(--operator-light);
 }
 
 .equals:hover {
   background-color: #0052cc;
+}
+
+.light-theme .equals:hover {
+  background-color: #2563eb;
 }
 
 .clear,
@@ -41,9 +66,20 @@ button:active {
   color: white;
 }
 
+.light-theme .clear,
+.light-theme .delete {
+  background-color: #cbd5e1;
+  color: #333333;
+}
+
 .clear:hover,
 .delete:hover {
   background-color: #4a5c70;
+}
+
+.light-theme .clear:hover,
+.light-theme .delete:hover {
+  background-color: #94a3b8;
 }
 
 .function {
@@ -51,6 +87,15 @@ button:active {
   color: white;
 }
 
+.light-theme .function {
+  background-color: #cbd5e1;
+  color: #333333;
+}
+
 .function:hover {
   background-color: #4a5c70;
+}
+
+.light-theme .function:hover {
+  background-color: #94a3b8;
 }

@@ -1,12 +1,10 @@
 import "../styles/Display.css"
 
-const Display = ({ previousOperand, currentOperand, operation }) => {
+function Display({ expression, result, theme }) {
   return (
-    <div className="display">
-      <div className="previous-operand">
-        {previousOperand} {operation}
-      </div>
-      <div className="current-operand">{currentOperand}</div>
+    <div className={`display ${theme}`}>
+      <div className="expression">{expression}</div>
+      <div className="result">{result}</div>
     </div>
   )
 }
